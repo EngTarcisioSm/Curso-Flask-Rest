@@ -1,24 +1,43 @@
-#1. imports de bibliotecas necessárias para criação de rest api
 from flask import Flask
 from flask_restful import Resource, Api
 
-#2. criação de objetos
 app = Flask(__name__)
 api = Api(app)
 
-#3. cada classe é um recurso da rest api
+#1. hoteis alocados na lista - futuramente esses valores podem vir de um banco
+#de dados
+hoteis = [
+    {
+        'hotel_id':'alpha',
+        'nome':'Alpha Hotel',
+        'estrelas':4.3,
+        'diaria':420.34,
+        'cidade':'Rio de Janeiro',
+    },
+    {
+        'hotel_id':'bravo',
+        'nome':'Bravo Hotel',
+        'estrelas':4.4,
+        'diaria':380.90,
+        'cidade':'Santa Catarina',
+    },
+    {
+        'hotel_id':'charlie',
+        'nome':'Charlie Hotel',
+        'estrelas':3.9,
+        'diaria':320.20,
+        'cidade': 'Santa Catarina',
+    }
+]
+
 class Hoteis(Resource):
 
-    #4. cada recurso deve implementar os metodos do http
     def get(self):
 
-        #5. resultado da requisição get, retorna o dicionário
-        return {'hoteis': 'meus hoteis'}
+        return {'hoteis': hoteis}
 
-#6. adicionando o recurso a api, '/hoteis' é como esse recurso deve ser chamado
 api.add_resource(Hoteis, '/hoteis')
 
-
 if __name__ == '__main__':
-    #execução da aplicação em modo de debug
+
     app.run(debug=True)
