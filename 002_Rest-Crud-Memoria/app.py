@@ -7,8 +7,6 @@ api = Api(app)
 
 api.add_resource(Hoteis, '/hoteis')
 
-#2. É inserido aqui o nome recurso, como o proximo parametro deve ser uma string
-# é colocado <string>:holtel_id
 api.add_resource(Hotel, '/hoteis/<string:hotel_id>')
 
 
