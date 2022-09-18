@@ -12,8 +12,8 @@ create_table = "CREATE TABLE IF NOT EXISTS hoteis (hotel_id text PRIMARY KEY, \
     nome text, estrelas real, diaria real, cidade text)"
 
 # 6. String para inserir um hotel no banco de dados
-insert_hotel = " INSERT INTO hoteis VALUES('alpha', 'Alpha Hotel', 4.3, 345.30, \
-    'Rio de Janeiro')"
+insert_hotel = " INSERT INTO hoteis VALUES('alpha', 'Alpha Hotel', 4.3, \
+    345.30, 'Rio de Janeiro')"
 
 # 7. Insere o hotel no banco de dados
 cursor.execute(insert_hotel)
