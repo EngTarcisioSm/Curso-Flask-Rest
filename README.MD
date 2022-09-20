@@ -1,8 +1,7 @@
-# 017_Requisitos_Inclusao_Usuario
+# 018
 
-- Ações possiveis a serem implementadas (recursos)
-    - usuarios (get)
-    - usuarios (delete)
-    - login (post)
-    - logout (post)
-    - cadastro (post)
+- Para criação do usuario será criado um novo arquivo models/usuario.py
+- O User_id será gerado automaticamente pelo sistema 
+
+- Att
+    - usuarios.py (1,2,3,4,5,6,7)
