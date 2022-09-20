@@ -14,7 +14,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 api = Api(app)
 
 
-
 @app.before_first_request
 def create_db():
     banco.create_all()
