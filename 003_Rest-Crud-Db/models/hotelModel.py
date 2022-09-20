@@ -1,29 +1,14 @@
-# 7. importa o objeto do banco de dados
 from sql_alchemy import banco
-
-# 8. passará a herdar de banco.Model
 
 
 class HotelModel(banco.Model):
 
-    # 9. Determina o nome da tabela
     __tablename__ = 'hoteis'
 
-    # 10. Mapeamento para o SQLAlchemy das colunas existentes dentro da tabela
-    # hoteis
-    # 11. indica que hoteis_id é uma coluna do tipo string sendo uma chave
-    # primaria
     hotel_id = banco.Column(banco.String, primary_key=True)
-    # 12. indica que nome é uma coluna do tipo string de tamanho 80
     nome = banco.Column(banco.String(80))
-    # 13. indica que estrelas é uma coluna do tipo float com precisão de uma
-    # casa decimal
     estrelas = banco.Column(banco.Float(precision=1))
-    # 14. indica que diaria é uma coluna do tipo float com precisão de duas
-    # casas decimais
     diaria = banco.Column(banco.Float(precision=2))
-    # 15. indica que cidade é uma coluna do tipo string com tamanho maximo de
-    # 40 digitos
     cidade = banco.Column(banco.String(40))
 
     def __init__(self, hotel_id, nome, estrelas, diaria, cidade) -> None:
@@ -42,3 +27,42 @@ class HotelModel(banco.Model):
             'diaria': self.diaria,
             'cidade': self.cidade
         }
+
+    # 4. O modelo do banco se torna responsavel por um método que busca no
+    # banco se ja existe algum determinado dado
+    # 5. É utilizado o decorador @classmethod para indicar que esse método
+    # pode ser utilizado sem que antes uma classe tenha sido instanciada,
+    # é necessário a utilização de cls nos seus atributos. 'cls' é a
+    # abreviação da classe, sendo uma palavra chave
+    @classmethod
+    def find_hotel(cls, hotel_id):
+        # 6. query é um método que existe dentro da classe que hotelModel
+        # herdou, significando "consulta", será filtrado através de filter_by
+        # realizando a operação "SELECT * FROM hoteis WHERE hotel_id=hotel_id"
+        # .first() retorna a primeira visualização de hotel_id que for
+        # encontrado
+
+        # 7. a utilização de "query", "filter_by" e "first" simplifica o acesso
+        # ao banco de dados, não necessitando efetuar vários processos,
+        # efetuando o acesso de forma bem simplificada o acesso ao db
+        hotel = cls.query.filter_by(hotel_id=hotel_id).first()
+
+        # 8. Se existe o hotel, será retornado o hotel caso contrario será
+        # retornado None
+        if hotel:
+            return hotel
+        return None
+
+        # 9. retornando para hotel.py
+
+    # 11. Criando o método para salvar o dado recebido
+    def save_hotel(self):
+        # 12. É aberto uma conexão com o banco e salvo os dados do objeto. 
+        # Nota que não é necessário passar os dados a serem salvos, uma vez 
+        # que em outra parte do código foi criado um objeto com esses dados. O 
+        # método abaixo tem a automação de reconhecer os dados que necessitam 
+        # de serem salvos no banco de dados quando a função save_hotel for 
+        # chamada.
+        banco.session.add(self)
+        # 13. Commita a inclusão feita no banco 
+        banco.session.commit()
