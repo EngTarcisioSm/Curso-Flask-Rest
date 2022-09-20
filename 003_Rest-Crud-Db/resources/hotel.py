@@ -48,41 +48,55 @@ class Hotel(Resource):
         return None
 
     def get(self, hotel_id):
-
-        hotel = self.findHotel(hotel_id)
-        if hotel is not None:
-            return hotel, 200
+        hotel_obj = HotelModel.find_hotel(hotel_id)
+        if hotel_obj:
+            return hotel_obj.json(), 200
         return {'message': 'Hotel not found'}, 404
 
     def post(self, hotel_id):
 
+        if HotelModel.find_hotel(hotel_id):
+            return {"message": "Hotel id '{}' already exists."
+                    .format(hotel_id)}, 400
+
         dados = self.argumentos.parse_args()
-        # 2. Alterada a logica de inserção de novos hoteis com auxilio da
-        # classe objeto. É criado o objeto que representa o novo hotel e em
-        # seguida é utilizado o método que efetua a conversão
         hotel_obj = HotelModel(hotel_id, **dados)
-        novo_hotel = hotel_obj.json()
 
-        hoteis.append(novo_hotel)
+        hotel_obj.save_hotel()
 
-        return novo_hotel, 200
+        return hotel_obj.json(), 200
 
     def put(self, hotel_id):
 
         dados = self.argumentos.parse_args()
-        # 3. Alterada a logica de inserção de novos hoteis com auxilio da
-        # classe objeto. É criado o objeto que representa o novo hotel e em
-        # seguida é utilizado o método que efetua a conversão
-        hotel_obj = HotelModel(hotel_id, **dados)
-        novo_hotel = hotel_obj.json()
 
-        hotel = self.findHotel(hotel_id)
-        print(type(hotel))
-        if hotel:
-            hotel.update(novo_hotel)
-            return novo_hotel, 200
-        hoteis.append(novo_hotel)
-        return novo_hotel, 201
+        # 3. A instancia do novo hotel esta sendo criado sem nem mesmo saber 
+        # se existe a necessidade dela 
+        # hotel_obj = HotelModel(hotel_id, **dados)
+        # novo_hotel = hotel_obj.json()
+
+        # 1. Como é necessário utilizar a busca no banco de dados é utilizado
+        # o método para verificar a existencia do hotel com o determinado ID
+        # hotel = self.findHotel(hotel_id)
+        hotel_encontrado = HotelModel.find_hotel(hotel_id)
+
+        if hotel_encontrado:
+            # 7. O metodo update_hotel ainda não esta criado, é passado apenas 
+            # os "dados" vindos da requisição, uma vez que o seu hotel_id já 
+            # existe  
+            hotel_encontrado.update_hotel(**dados)
+            # 10. As atualizações são salvas no objeto e consequentemente no db
+            hotel_encontrado.save_hotel()
+
+            # 2. Retorna o json do hotel encontrado em formato json
+            return hotel_encontrado.json(), 200
+
+        # 4. Caso o hotel não exista ele é criado 
+        hotel_new = HotelModel(hotel_id, **dados)
+        # 5. Salvo o hotel criado
+        hotel_new.save_hotel()
+        # 6. Retorno do hotel salvo em formato json
+        return hotel_new.json(), 201
 
     def delete(self, hotel_id):
         global hoteis
