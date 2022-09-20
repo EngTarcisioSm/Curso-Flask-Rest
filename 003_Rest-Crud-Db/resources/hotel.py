@@ -35,8 +35,14 @@ class Hoteis(Resource):
 class Hotel(Resource):
 
     argumentos = reqparse.RequestParser()
-    argumentos.add_argument('nome')
-    argumentos.add_argument('estrelas')
+
+    # 1. É possivel ajustar os parametros de entrada para especificar o tipo 
+    # de dado bem como inserir se o mesmo é ou não um parametro obrigatório, 
+    # bem como uma mensagem de erro informando que o campo não pode ser deixado em branco
+    argumentos.add_argument('nome', type=str, required=True, help="The name \
+        field cannot be left blank.")
+    argumentos.add_argument('estrelas', type=float, required=True, help="The \
+        'estrelas' field cannot be left brank")
     argumentos.add_argument('diaria')
     argumentos.add_argument('cidade')
 
@@ -61,9 +67,15 @@ class Hotel(Resource):
         dados = self.argumentos.parse_args()
         hotel_obj = HotelModel(hotel_id, **dados)
 
-        hotel_obj.save_hotel()
-
-        return hotel_obj.json(), 200
+        # 3. O ato de salvar um documento pode acarretar também em falha no 
+        # processo, para issov para necessario um tratamento utilizando try e 
+        # except
+        try:
+            hotel_obj.save_hotel()
+        except:
+            # 3. 500 erro interno do servidor
+            return {'message': 'An internal error ocurred try to save hotel again'}, 500
+        return hotel_obj.json(), 500
 
     def put(self, hotel_id):
 
@@ -85,8 +97,12 @@ class Hotel(Resource):
 
     def delete(self, hotel_id):
         hotel = HotelModel.find_hotel(hotel_id)
-        if hotel:
-            hotel.delete_hotel()
-            return {'message': 'Hotel deleted'}
         
+        # 4. O delete demanda a mesma preocupação
+        if hotel:
+            try:
+                hotel.delete_hotel()
+            except:
+                return {'message': 'An error ocurred tryin'}
+                    
         return {'message': 'Hotel not found'}, 404
