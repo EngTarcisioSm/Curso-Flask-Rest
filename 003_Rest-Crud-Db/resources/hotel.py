@@ -70,32 +70,18 @@ class Hotel(Resource):
 
         dados = self.argumentos.parse_args()
 
-        # 3. A instancia do novo hotel esta sendo criado sem nem mesmo saber 
-        # se existe a necessidade dela 
-        # hotel_obj = HotelModel(hotel_id, **dados)
-        # novo_hotel = hotel_obj.json()
-
-        # 1. Como é necessário utilizar a busca no banco de dados é utilizado
-        # o método para verificar a existencia do hotel com o determinado ID
-        # hotel = self.findHotel(hotel_id)
         hotel_encontrado = HotelModel.find_hotel(hotel_id)
 
         if hotel_encontrado:
-            # 7. O metodo update_hotel ainda não esta criado, é passado apenas 
-            # os "dados" vindos da requisição, uma vez que o seu hotel_id já 
-            # existe  
+
             hotel_encontrado.update_hotel(**dados)
-            # 10. As atualizações são salvas no objeto e consequentemente no db
             hotel_encontrado.save_hotel()
 
-            # 2. Retorna o json do hotel encontrado em formato json
             return hotel_encontrado.json(), 200
 
-        # 4. Caso o hotel não exista ele é criado 
+
         hotel_new = HotelModel(hotel_id, **dados)
-        # 5. Salvo o hotel criado
         hotel_new.save_hotel()
-        # 6. Retorno do hotel salvo em formato json
         return hotel_new.json(), 201
 
     def delete(self, hotel_id):
