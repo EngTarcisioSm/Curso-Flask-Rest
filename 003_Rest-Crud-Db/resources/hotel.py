@@ -27,9 +27,7 @@ hoteis = [
 
 
 class Hoteis(Resource):
-    # 1. O método query.all() retorna todo o banco de dados, utilizando list 
-    # comprehension torna-se possivel o fatiamento dos dados seguido de sua 
-    # conversão para json 
+
     def get(self):
         return {'hoteis': [hotel.json() for hotel in HotelModel.query.all()]}
 
