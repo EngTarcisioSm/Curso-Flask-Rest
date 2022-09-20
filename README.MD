@@ -2,3 +2,4 @@
 
 - Atualizando o get de Hoteis 
 - Att
+    - hotel.py(1)
