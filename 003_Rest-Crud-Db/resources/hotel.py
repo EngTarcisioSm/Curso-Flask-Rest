@@ -48,41 +48,41 @@ class Hotel(Resource):
         return None
 
     def get(self, hotel_id):
-
-        hotel = self.findHotel(hotel_id)
-        if hotel is not None:
-            return hotel, 200
+        hotel_obj = HotelModel.find_hotel(hotel_id)
+        if hotel_obj:
+            return hotel_obj.json(), 200
         return {'message': 'Hotel not found'}, 404
 
     def post(self, hotel_id):
 
+        if HotelModel.find_hotel(hotel_id):
+            return {"message": "Hotel id '{}' already exists."
+                    .format(hotel_id)}, 400
+
         dados = self.argumentos.parse_args()
-        # 2. Alterada a logica de inserção de novos hoteis com auxilio da
-        # classe objeto. É criado o objeto que representa o novo hotel e em
-        # seguida é utilizado o método que efetua a conversão
         hotel_obj = HotelModel(hotel_id, **dados)
-        novo_hotel = hotel_obj.json()
 
-        hoteis.append(novo_hotel)
+        hotel_obj.save_hotel()
 
-        return novo_hotel, 200
+        return hotel_obj.json(), 200
 
     def put(self, hotel_id):
 
         dados = self.argumentos.parse_args()
-        # 3. Alterada a logica de inserção de novos hoteis com auxilio da
-        # classe objeto. É criado o objeto que representa o novo hotel e em
-        # seguida é utilizado o método que efetua a conversão
-        hotel_obj = HotelModel(hotel_id, **dados)
-        novo_hotel = hotel_obj.json()
 
-        hotel = self.findHotel(hotel_id)
-        print(type(hotel))
-        if hotel:
-            hotel.update(novo_hotel)
-            return novo_hotel, 200
-        hoteis.append(novo_hotel)
-        return novo_hotel, 201
+        hotel_encontrado = HotelModel.find_hotel(hotel_id)
+
+        if hotel_encontrado:
+
+            hotel_encontrado.update_hotel(**dados)
+            hotel_encontrado.save_hotel()
+
+            return hotel_encontrado.json(), 200
+
+
+        hotel_new = HotelModel(hotel_id, **dados)
+        hotel_new.save_hotel()
+        return hotel_new.json(), 201
 
     def delete(self, hotel_id):
         global hoteis
