@@ -40,5 +40,12 @@ class HotelModel(banco.Model):
     def save_hotel(self):
 
         banco.session.add(self)
-
         banco.session.commit()
+    
+    # 8. todos os dados serão recebidos com excessão do ID 
+    def update_hotel(self, nome, estrelas, diaria, cidade):
+        # 9. Os dados são atualizados nos seus parametros internos
+        self.nome = nome
+        self.estrelas = estrelas
+        self.diaria = diaria
+        self.cidade = cidade

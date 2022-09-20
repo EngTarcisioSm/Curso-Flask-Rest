@@ -1,6 +1,7 @@
-# 012_Att_Get
+# 013_Att_Put
 
-- Implementação do método get associado ao banco de dados
-
-- Att 
-    - hotel.py (1)
+- Atualização do método put
+- Att
+    - hotel.py (1,2,3,4,5,6,7)
+    - models/hotelModel (8,9)
+    - hotel.py ()
