@@ -47,7 +47,6 @@ class HotelModel(banco.Model):
         self.diaria = diaria
         self.cidade = cidade
     
-    # 5. Deleta o hotel
     def delete_hotel(self):
         banco.session.delete(self)
         banco.session.commit()

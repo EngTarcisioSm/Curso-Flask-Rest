@@ -1,5 +1,4 @@
-# 014_Att_Delete
+# 015_Att_get_hoteis
 
+- Atualizando o get de Hoteis 
 - Att
-    - hotel.py(1,2,3,4)
-    - hotelModel.py (5)

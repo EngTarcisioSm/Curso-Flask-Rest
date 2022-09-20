@@ -27,10 +27,11 @@ hoteis = [
 
 
 class Hoteis(Resource):
-
+    # 1. O método query.all() retorna todo o banco de dados, utilizando list 
+    # comprehension torna-se possivel o fatiamento dos dados seguido de sua 
+    # conversão para json 
     def get(self):
-
-        return {'hoteis': hoteis}
+        return {'hoteis': [hotel.json() for hotel in HotelModel.query.all()]}
 
 
 class Hotel(Resource):
@@ -85,16 +86,9 @@ class Hotel(Resource):
         return hotel_new.json(), 201
 
     def delete(self, hotel_id):
-        # 1. Tornou-se obsoleto devido a não utilizar mais hoteis mais sim o banco de dados
-        # global hoteis
-        # hoteis = [hotel for hotel in hoteis if hotel['hotel_id'] != hotel_id]
-        
-        # 2. busca o hotel a ser deletado no banco de dados, caso encontre o delete 
         hotel = HotelModel.find_hotel(hotel_id)
         if hotel:
-            # 3. Implementa o metodo de deleção de hoteis
             hotel.delete_hotel()
             return {'message': 'Hotel deleted'}
         
-        # 4. caso o hotel não seja encontrado é retornado uma mensagem de erro 
         return {'message': 'Hotel not found'}, 404
