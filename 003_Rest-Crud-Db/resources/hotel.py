@@ -47,11 +47,13 @@ class Hotel(Resource):
                 return hotel
         return None
 
+    # 1. O método get de obter os dados, utiliza-se do método já implementado 
+    # no models/hotelModel, no qual ele busca o hotel pelo id, não tendo muita 
+    # modificação a ser feita
     def get(self, hotel_id):
-
-        hotel = self.findHotel(hotel_id)
-        if hotel is not None:
-            return hotel, 200
+        hotel_obj = HotelModel.find_hotel(hotel_id)
+        if hotel_obj:
+            return hotel_obj.json(), 200
         return {'message': 'Hotel not found'}, 404
 
     def post(self, hotel_id):
