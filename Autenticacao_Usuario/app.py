@@ -21,10 +21,7 @@ def create_db():
 
 
 api.add_resource(Hoteis, '/hoteis')
-
 api.add_resource(Hotel, '/hoteis/<string:hotel_id>')
-
-# 7. Incluir novo recurso recebendo um inteiro
 api.add_resource(User, '/usuarios/<int:user_id>')
 
 
