@@ -1,7 +1,6 @@
-# 018
+# 019
 
-- Para criação do usuario será criado um novo arquivo models/usuario.py
-- O User_id será gerado automaticamente pelo sistema 
-
+- Criação do recurso de resources/usuario.py
 - Att
-    - usuarios.py (1,2,3,4,5,6,7)
+    - resources/usuario.py (1,2,3,4,5,6)
+    - app.py

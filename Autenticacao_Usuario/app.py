@@ -2,6 +2,7 @@ from re import A
 from flask import Flask
 from flask_restful import Api
 from resources.hotel import Hoteis, Hotel
+from resources.usuario import User
 
 app = Flask(__name__)
 
@@ -22,6 +23,9 @@ def create_db():
 api.add_resource(Hoteis, '/hoteis')
 
 api.add_resource(Hotel, '/hoteis/<string:hotel_id>')
+
+# 7. Incluir novo recurso recebendo um inteiro
+api.add_resource(User, '/usuarios/<int:user_id>')
 
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@ class UserModel(banco.Model):
     # 1. Inserção do nome da tabela e as colunas para que o SQL_Alchemy consiga gerar a tabela 
     __tablename__ = 'usuarios'
 
-    user_id = banco.Column(banco.Interger, primary_key=True)
+    user_id = banco.Column(banco.Integer, primary_key=True)
     login = banco.Column(banco.String(40))
     senha = banco.Column(banco.String(40))
 
