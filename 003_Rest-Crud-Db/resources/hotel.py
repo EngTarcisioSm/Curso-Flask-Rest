@@ -36,9 +36,6 @@ class Hotel(Resource):
 
     argumentos = reqparse.RequestParser()
 
-    # 1. É possivel ajustar os parametros de entrada para especificar o tipo 
-    # de dado bem como inserir se o mesmo é ou não um parametro obrigatório, 
-    # bem como uma mensagem de erro informando que o campo não pode ser deixado em branco
     argumentos.add_argument('nome', type=str, required=True, help="The name \
         field cannot be left blank.")
     argumentos.add_argument('estrelas', type=float, required=True, help="The \
@@ -67,13 +64,9 @@ class Hotel(Resource):
         dados = self.argumentos.parse_args()
         hotel_obj = HotelModel(hotel_id, **dados)
 
-        # 3. O ato de salvar um documento pode acarretar também em falha no 
-        # processo, para issov para necessario um tratamento utilizando try e 
-        # except
         try:
             hotel_obj.save_hotel()
         except:
-            # 3. 500 erro interno do servidor
             return {'message': 'An internal error ocurred try to save hotel again'}, 500
         return hotel_obj.json(), 500
 
@@ -98,7 +91,6 @@ class Hotel(Resource):
     def delete(self, hotel_id):
         hotel = HotelModel.find_hotel(hotel_id)
         
-        # 4. O delete demanda a mesma preocupação
         if hotel:
             try:
                 hotel.delete_hotel()

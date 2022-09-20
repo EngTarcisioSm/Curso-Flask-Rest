@@ -1,4 +1,8 @@
-# 016_Refinamento
+# 017_Requisitos_Inclusao_Usuario
 
-- App
-    - hotel.py (1,2,3,4)
+- Ações possiveis a serem implementadas (recursos)
+    - usuarios (get)
+    - usuarios (delete)
+    - login (post)
+    - logout (post)
+    - cadastro (post)
