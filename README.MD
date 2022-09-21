@@ -11,3 +11,4 @@
     - ) Werkzeug==2.2.2 não possui mais a função de comparação segura de string sendo necessário um downgrade para a versiona 2.0.0 que possui a função 
         - pip install Werkzeug==2.0.0
     - A partir da implementação do JWT torna-se possivel exigir que o usuario possua um token de acesso para poder consumir a aplicação 
+    - Atualização de requirements para correto funcionamento da aplicação 
