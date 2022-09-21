@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/home/tarcisiosouzademelo/Área de Trabalho/Flask-Rest/venv/bin/python" "$0" "$@"
+'''exec' "/home/tarcisio/Área de Trabalho/Projetos/Curso-Flask-Rest/venv/bin/python" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re

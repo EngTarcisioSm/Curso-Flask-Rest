@@ -25,6 +25,14 @@ class UserModel(banco.Model):
         if user:
             return user
         return None
+    
+    # 8. Implementação de pesquisa de usuario por login
+    @classmethod
+    def find_by_login(cls, login):
+        user = cls.query.filter_by(login=login).first()
+        if user:
+            return user
+        return None
 
     def save_user(self):
         banco.session.add(self)
