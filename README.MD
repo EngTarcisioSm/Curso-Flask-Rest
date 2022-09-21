@@ -1,17 +1,7 @@
-# 022_Teste_login
-
-- Ja é possivel efetuar diversas operações dentro da api, entretanto no momento não é necessário estar logado para efetuar esse procedimento, não sendo recomendavel tal prática.
-- Para o Get de Hotel não há necessidade de estar logado, entretanto para a criação de hotel, atualização de hotel e deletar hotel é necessário que o usuario esteja logado 
-- Para que os metodos se tornem acessiveis é necessário efetuar o login, pegar o token, no header criar uma key com o nome de "Authorization" e em value digitar Bearer <token>, sem os simbolos de "<>"
-- Att
-    - resources/hotel.py (1,2,3,4,5)
-    - resources/usuario.py (6,7)
+# 023_Logout
 
 
 
-
-
-- OBSERVACAO 2
 - Atualização
 ~~~
 IMPORTANTE! Atualização do flask_jwt_extended
