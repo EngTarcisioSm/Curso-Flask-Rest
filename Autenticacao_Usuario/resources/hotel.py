@@ -1,5 +1,10 @@
 from flask_restful import Resource, reqparse
 from models.hotelModel import HotelModel
+# 1. importar o modulo para inserir requisição de token para os recursos,  
+from flask_jwt_extended import jwt_required
+
+# 2. a partir daqui será definido quais as operações que necessitam do usuario 
+# estar logado para que sejam efetuadas 
 
 class Hoteis(Resource):
 
@@ -30,6 +35,9 @@ class Hotel(Resource):
             return hotel_obj.json(), 200
         return {'message': 'Hotel not found'}, 404
 
+    # 3. adicionar requisição para qe o metodo post de hotel necessite estar 
+    # logado, tendo de passar o token de acesso antes de efeutar a operação 
+    @jwt_required()
     def post(self, hotel_id):
 
         if HotelModel.find_hotel(hotel_id):
@@ -45,6 +53,8 @@ class Hotel(Resource):
             return {'message': 'An internal error ocurred try to save hotel again'}, 500
         return hotel_obj.json(), 500
 
+    # 4. ==3
+    @jwt_required()
     def put(self, hotel_id):
 
         dados = self.argumentos.parse_args()
@@ -63,6 +73,8 @@ class Hotel(Resource):
         hotel_new.save_hotel()
         return hotel_new.json(), 201
 
+    # 5. ==3
+    @jwt_required()
     def delete(self, hotel_id):
         hotel = HotelModel.find_hotel(hotel_id)
         
