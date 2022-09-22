@@ -1,5 +1,4 @@
-# 028_Filtros_Anvancados_Abrindo_Conexao_DB
+# 029_Filtros_Avancado_Pegar_Dados
 
-
-- Att
+- Att 
     - resources/hotel.py (1,2,3)

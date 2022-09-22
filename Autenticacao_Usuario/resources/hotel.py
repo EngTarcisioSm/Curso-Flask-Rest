@@ -45,7 +45,6 @@ def normalize_path_params(cidade=None,
 
 class Hoteis(Resource):
     def get(self):
-        # 2. configurando a comunicação com o banco de dados 
         connection = sqlite3.connect('banco.db')
         cursor = connection.cursor()
 
@@ -54,22 +53,31 @@ class Hoteis(Resource):
         dados_validos = {chave: dados[chave] for chave in dados if dados[chave]\
             is not None}
 
-        # 1. normalização dos dados recebidos 
         parametros = normalize_path_params(**dados_validos)
 
-        # 3. verifica se nos parametros existe a chave cidade, caso exista é 
-        # gerado uma string de consulta, em caso negativo é gerado outra string
         if parametros.get('cidade'):
             consulta = "SELECT * FROM hoteis WHERE \
-                (estrelas > ? and estrelas < ?) \
+                (cidade = ? \
+                and(estrelas > ? and estrelas < ?) \
                 and (diaria > ? and diaria < ?) \
-                and (cidade = ? \
                 LIMIT ? OFFSET ?"
+            
+            # 1. pegar uma tupla com todos os dados dos paramtros para que 
+            # eles entrem onde há "?" na string de comunicação com o banco de 
+            # dados
+            tupla = tuple([parametros[chave] for chave in parametros])
         else:
+            # 2. consulta semelhante sem a cidade e captando a tupla para 
+            # inserir nas interrogações, é importante que a ordem da pesquisa 
+            # esteja identica ao que a função normalize retorna os dados
             consulta = "SELECT * FROM hoteis WHERE \
                 (estrelas > ? and estrelas < ?) \
                 and (diaria > ? and diaria < ?) \
                 LIMIT ? OFFSET ?"
+            tupla = tuple([parametros[chave] for chave in parametros])
+        
+        # 3. pesquisa no banco de dados 
+        resultado = cursor.execute(consulta, tupla)
 
         return {'hoteis': [hotel.json() for hotel in HotelModel.query.all()]}
 
