@@ -1,14 +1,36 @@
 from flask_restful import Resource, reqparse
 from models.hotelModel import HotelModel
-# 1. importar o modulo para inserir requisição de token para os recursos,  
-from flask_jwt_extended import jwt_required
 
-# 2. a partir daqui será definido quais as operações que necessitam do usuario 
-# estar logado para que sejam efetuadas 
+from flask_jwt_extended import jwt_required
+# 3. Como a pesquisa existe uma complexidade maior é necessário importar 
+# biblioteca específica para tratar de requisições 
+import sqlite3
+
+
+# 1. os dados de pesquisa são passado via path baseado no caractere inicial "?"
+#  para iniciar o corpo da pesquisa dentro do path, juntamente com o caractere 
+# "&" para indicar uma junção de mais de uma pesquisa como se fosse um "E"
+
+# 2. Será criado um reqparse especifico para a pesquisa.  
+
+# 4. Criando o req parser
+path_params = reqparse.RequestParser()
+path_params.add_argument('cidade', type=str)
+path_params.add_argument('estrelas_min', type=float)
+path_params.add_argument('estrelas_max', type=float)
+path_params.add_argument('diaria_min', type=float)
+path_params.add_argument('diaria_max', type=float)
+path_params.add_argument('limit', type=float)
+path_params.add_argument('offset', type=float)
+
 
 class Hoteis(Resource):
 
     def get(self):
+
+        # 5. Serão recebidos todos os dados vindos do path
+        dados = path_params.parse_args()
+
         return {'hoteis': [hotel.json() for hotel in HotelModel.query.all()]}
 
 
@@ -35,8 +57,6 @@ class Hotel(Resource):
             return hotel_obj.json(), 200
         return {'message': 'Hotel not found'}, 404
 
-    # 3. adicionar requisição para qe o metodo post de hotel necessite estar 
-    # logado, tendo de passar o token de acesso antes de efeutar a operação 
     @jwt_required()
     def post(self, hotel_id):
 
