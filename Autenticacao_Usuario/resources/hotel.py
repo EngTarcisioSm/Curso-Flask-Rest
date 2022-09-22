@@ -1,19 +1,8 @@
 from flask_restful import Resource, reqparse
 from models.hotelModel import HotelModel
-
 from flask_jwt_extended import jwt_required
-# 3. Como a pesquisa existe uma complexidade maior é necessário importar 
-# biblioteca específica para tratar de requisições 
 import sqlite3
 
-
-# 1. os dados de pesquisa são passado via path baseado no caractere inicial "?"
-#  para iniciar o corpo da pesquisa dentro do path, juntamente com o caractere 
-# "&" para indicar uma junção de mais de uma pesquisa como se fosse um "E"
-
-# 2. Será criado um reqparse especifico para a pesquisa.  
-
-# 4. Criando o req parser
 path_params = reqparse.RequestParser()
 path_params.add_argument('cidade', type=str)
 path_params.add_argument('estrelas_min', type=float)
@@ -23,13 +12,17 @@ path_params.add_argument('diaria_max', type=float)
 path_params.add_argument('limit', type=float)
 path_params.add_argument('offset', type=float)
 
+# 1. todos os dados vindos do parse são opcionais, quando não passados seu 
+# valor fica como nulo ou None
 
 class Hoteis(Resource):
 
     def get(self):
-
-        # 5. Serão recebidos todos os dados vindos do path
         dados = path_params.parse_args()
+        
+        # 2. Para pegar os dados não nulos é possivel pega-los usando compreensão de listas. O conjunto chave e dados[chave] para todos os dados que forem diferentes de nulo 
+        dados_validos = {chave:dados[chave] for chave in dados if dados[chave]\
+            is not None}
 
         return {'hoteis': [hotel.json() for hotel in HotelModel.query.all()]}
 
