@@ -13,11 +13,6 @@ path_params.add_argument('limit', type=float)
 path_params.add_argument('offset', type=float)
 
 
-# 1. será criado uma função para a normalização de uma string para consulta sql
-# . nesta função existem parametros default. A função tem como objeto principal 
-# avaliar se foi ou não recebido cidade, pois é o unico parametro que não 
-# existe um valor default válido
-
 def normalize_path_params(cidade=None, 
                           estrelas_min=0, 
                           estrelas_max=0, 
@@ -27,10 +22,7 @@ def normalize_path_params(cidade=None,
                           offset=0, 
                           **dados):
     
-    # 2. se cidade existe é retornado todos os dados, caso não retorna todos 
-    # menos o dado cidade
     if cidade:
-        # 3. retorna um dicionario
         return {
             'cidade': cidade,
             'estrelas_min': estrelas_min,
@@ -40,7 +32,6 @@ def normalize_path_params(cidade=None,
             'limit': limit,
             'offset': offset
         }
-    # 3. Caso cidade não exista retorna tudo menos cidade
     return {
         'estrelas_min': estrelas_min,
         'estrelas_max': estrelas_max,
@@ -50,7 +41,7 @@ def normalize_path_params(cidade=None,
         'offset': offset
     }
         
-        
+
 class Hoteis(Resource):
     def get(self):
         dados = path_params.parse_args()

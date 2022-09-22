@@ -1,4 +1,2 @@
-# Filtros_Avancados_02_Pesquisa_via_Path
+# 028_Filtros_Anvancados_Abrindo_Conexao_DB
 
-- Att
-    - resources/hotel.py (1,2,3)
