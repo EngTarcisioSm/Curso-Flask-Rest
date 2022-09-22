@@ -1,3 +1,4 @@
+
 from flask_restful import Resource, reqparse
 from models.hotelModel import HotelModel
 from flask_jwt_extended import jwt_required
@@ -44,10 +45,31 @@ def normalize_path_params(cidade=None,
 
 class Hoteis(Resource):
     def get(self):
+        # 2. configurando a comunicação com o banco de dados 
+        connection = sqlite3.connect('banco.db')
+        cursor = connection.cursor()
+
         dados = path_params.parse_args()
 
-        dados_validos = {chave:dados[chave] for chave in dados if dados[chave]\
+        dados_validos = {chave: dados[chave] for chave in dados if dados[chave]\
             is not None}
+
+        # 1. normalização dos dados recebidos 
+        parametros = normalize_path_params(**dados_validos)
+
+        # 3. verifica se nos parametros existe a chave cidade, caso exista é 
+        # gerado uma string de consulta, em caso negativo é gerado outra string
+        if parametros.get('cidade'):
+            consulta = "SELECT * FROM hoteis WHERE \
+                (estrelas > ? and estrelas < ?) \
+                and (diaria > ? and diaria < ?) \
+                and (cidade = ? \
+                LIMIT ? OFFSET ?"
+        else:
+            consulta = "SELECT * FROM hoteis WHERE \
+                (estrelas > ? and estrelas < ?) \
+                and (diaria > ? and diaria < ?) \
+                LIMIT ? OFFSET ?"
 
         return {'hoteis': [hotel.json() for hotel in HotelModel.query.all()]}
 
