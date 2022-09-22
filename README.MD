@@ -6,3 +6,6 @@
         - Estrela 
         - Diaria 
         - Cidade
+
+- Att
+    - resources/hotel (1,2,3,4,5)
