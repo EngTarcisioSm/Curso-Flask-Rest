@@ -1,7 +1,21 @@
-# 023_Logout
+# 023: Logout
+
+- Lembrando que para deslogar é necessário estar logado
+
+- Criar o recurso de logout
+- Att
+    - resources/usuario.py (1,2,3,4,5,6,7)
+    - blacklist.py (8)
+    - resources/usuario.py (9)
+    - no arquivo app.py (10,11,12,13,14,15,16)
 
 
 
+
+
+
+
+- OBSERVACAO 2
 - Atualização
 ~~~
 IMPORTANTE! Atualização do flask_jwt_extended
