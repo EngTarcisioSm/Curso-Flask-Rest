@@ -1,9 +1,10 @@
 from flask_restful import Resource, reqparse
 from models.usuario import UserModel
-from flask_jwt_extended import create_access_token
+# 6. importar o get_jwt
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 from werkzeug.security import safe_str_cmp
-# 6. importar o modulo para inserir requisição de token para os recursos,  
-from flask_jwt_extended import jwt_required
+# 9. importar o blacklist do arquivo BLACKLIST
+from blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 atributos.add_argument('login', type=str, required=True, help="The \
@@ -20,8 +21,6 @@ class User(Resource):
             return user_obj.json(), 200
         return {'message': 'User not found'}, 404
 
-    # 7. Apenas nesta aplicação o metodo "delete" o usuario necessita estar 
-    # logado para ser deletado 
     @jwt_required()
     def delete(self, user_id):
         user = UserModel.find_user(user_id)
@@ -63,3 +62,23 @@ class UserLogin(Resource):
             return {'acess_token': token_acesso}, 200
 
         return {'message': 'The username or password is incorrect.'}, 401
+
+
+# 1. Recurso de logout
+class UserLogout(Resource):
+
+    # 2. para ocorrer o logout o usuario deve estar logado
+    @jwt_required()
+    def post(self):
+        # 3. pegar o identificador do token que foi criado
+        jwt_id = get_jwt()['jti']
+
+        # 4. o token deve ser armazenado dentro de um set que é armazenado em
+        # um arquivo python
+        BLACKLIST.add(jwt_id)
+
+        # 5. envia a mensagem de sucesso do logout juntamente com o valor 200
+        # de requisição bem sucedida
+        return {'message': 'Logout successfully!'}, 200
+
+        # 7. O arquivo blacklist deve ser criado na raiz do projeto 
