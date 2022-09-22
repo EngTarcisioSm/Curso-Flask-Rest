@@ -1,0 +1,5 @@
+# Bloqueia venv
+/venv
+
+#Bloqueia pasta
+/__pycache__
