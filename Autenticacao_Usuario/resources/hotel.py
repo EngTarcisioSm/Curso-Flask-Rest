@@ -12,15 +12,49 @@ path_params.add_argument('diaria_max', type=float)
 path_params.add_argument('limit', type=float)
 path_params.add_argument('offset', type=float)
 
-# 1. todos os dados vindos do parse são opcionais, quando não passados seu 
-# valor fica como nulo ou None
 
+# 1. será criado uma função para a normalização de uma string para consulta sql
+# . nesta função existem parametros default. A função tem como objeto principal 
+# avaliar se foi ou não recebido cidade, pois é o unico parametro que não 
+# existe um valor default válido
+
+def normalize_path_params(cidade=None, 
+                          estrelas_min=0, 
+                          estrelas_max=0, 
+                          diaria_min=0, 
+                          diaria_max=99999999999, 
+                          limit=50, 
+                          offset=0, 
+                          **dados):
+    
+    # 2. se cidade existe é retornado todos os dados, caso não retorna todos 
+    # menos o dado cidade
+    if cidade:
+        # 3. retorna um dicionario
+        return {
+            'cidade': cidade,
+            'estrelas_min': estrelas_min,
+            'estrelas_max': estrelas_max,
+            'diaria_min': diaria_min,
+            'diaria_max': diaria_max,
+            'limit': limit,
+            'offset': offset
+        }
+    # 3. Caso cidade não exista retorna tudo menos cidade
+    return {
+        'estrelas_min': estrelas_min,
+        'estrelas_max': estrelas_max,
+        'diaria_min': diaria_min,
+        'diaria_max': diaria_max,
+        'limit': limit,
+        'offset': offset
+    }
+        
+        
 class Hoteis(Resource):
-
     def get(self):
         dados = path_params.parse_args()
-        
-        # 2. Para pegar os dados não nulos é possivel pega-los usando compreensão de listas. O conjunto chave e dados[chave] para todos os dados que forem diferentes de nulo 
+
         dados_validos = {chave:dados[chave] for chave in dados if dados[chave]\
             is not None}
 
