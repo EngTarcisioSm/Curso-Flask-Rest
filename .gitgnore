@@ -1,5 +1,5 @@
 # Bloqueia venv
-/venv
+venv/
 
 #Bloqueia pasta
-/__pycache__
+__pycache__/
