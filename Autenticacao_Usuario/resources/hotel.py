@@ -14,15 +14,15 @@ path_params.add_argument('limit', type=float)
 path_params.add_argument('offset', type=float)
 
 
-def normalize_path_params(cidade=None, 
-                          estrelas_min=0, 
-                          estrelas_max=0, 
-                          diaria_min=0, 
-                          diaria_max=99999999999, 
-                          limit=50, 
-                          offset=0, 
+def normalize_path_params(cidade=None,
+                          estrelas_min=0,
+                          estrelas_max=0,
+                          diaria_min=0,
+                          diaria_max=99999999999,
+                          limit=50,
+                          offset=0,
                           **dados):
-    
+
     if cidade:
         return {
             'cidade': cidade,
@@ -41,7 +41,7 @@ def normalize_path_params(cidade=None,
         'limit': limit,
         'offset': offset
     }
-        
+
 
 class Hoteis(Resource):
     def get(self):
@@ -50,8 +50,8 @@ class Hoteis(Resource):
 
         dados = path_params.parse_args()
 
-        dados_validos = {chave: dados[chave] for chave in dados if dados[chave]\
-            is not None}
+        dados_validos = {chave: dados[chave] for chave in dados if dados[chave]
+                         is not None}
 
         parametros = normalize_path_params(**dados_validos)
 
@@ -61,23 +61,33 @@ class Hoteis(Resource):
                 and(estrelas > ? and estrelas < ?) \
                 and (diaria > ? and diaria < ?) \
                 LIMIT ? OFFSET ?"
-            
-            # 1. pegar uma tupla com todos os dados dos paramtros para que 
-            # eles entrem onde há "?" na string de comunicação com o banco de 
-            # dados
+
             tupla = tuple([parametros[chave] for chave in parametros])
         else:
-            # 2. consulta semelhante sem a cidade e captando a tupla para 
-            # inserir nas interrogações, é importante que a ordem da pesquisa 
-            # esteja identica ao que a função normalize retorna os dados
             consulta = "SELECT * FROM hoteis WHERE \
                 (estrelas > ? and estrelas < ?) \
                 and (diaria > ? and diaria < ?) \
                 LIMIT ? OFFSET ?"
             tupla = tuple([parametros[chave] for chave in parametros])
-        
-        # 3. pesquisa no banco de dados 
+
         resultado = cursor.execute(consulta, tupla)
+
+        # 1. resultado será colocado em uma lista, deve haver uma iteração
+        # sobre o resultado pois o mesmo só possui os valores e não as chaves
+        # dos dados
+        hoteis = list()
+
+        for linha in resultado:
+            # 2. Aqui também deve-se verificar a ordem em que foi criado o
+            # banco pois os dados viram conforme a ordem do banco em um array
+            # contendo apenas os valores sendo um array bidimensional
+            hoteis.append({
+                "hotel_id": linha[0],
+                "nome": linha[1],
+                "estrelas": linha[2],
+                "diaria": linha[3],
+                "cidade": linha[4]
+            })
 
         return {'hoteis': [hotel.json() for hotel in HotelModel.query.all()]}
 
@@ -136,7 +146,6 @@ class Hotel(Resource):
 
             return hotel_encontrado.json(), 200
 
-
         hotel_new = HotelModel(hotel_id, **dados)
         hotel_new.save_hotel()
         return hotel_new.json(), 201
@@ -145,11 +154,11 @@ class Hotel(Resource):
     @jwt_required()
     def delete(self, hotel_id):
         hotel = HotelModel.find_hotel(hotel_id)
-        
+
         if hotel:
             try:
                 hotel.delete_hotel()
             except:
                 return {'message': 'An error ocurred tryin'}
-                    
+
         return {'message': 'Hotel not found'}, 404

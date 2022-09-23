@@ -1,4 +1,4 @@
-# 029_Filtros_Avancado_Pegar_Dados
+# 030_Filtros_Avancados_Iteracao
 
 - Att 
-    - resources/hotel.py (1,2,3)
+    resources/hotel.py (1,2)

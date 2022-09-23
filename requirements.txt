@@ -11,4 +11,4 @@ PyJWT
 pytz
 six
 SQLAlchemy
-Werkzeug
+Werkzeug==2.0.0
