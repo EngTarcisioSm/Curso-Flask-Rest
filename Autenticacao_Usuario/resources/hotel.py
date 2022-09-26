@@ -57,9 +57,6 @@ class Hoteis(Resource):
 
         if parametros.get('cidade'):
 
-            # 1. Foi substituido na pesquisa o simbolo de ">" por ">=" e o 
-            # simbolo de "<" por "<=" para que a consulta tivesse uma 
-            # abrangencia mais proxima da realidade do que se deseja
             consulta = "SELECT * FROM hoteis \
                 WHERE cidade = ? \
                 and (estrelas >= ? and estrelas <= ?) \
@@ -67,8 +64,6 @@ class Hoteis(Resource):
                 LIMIT ? OFFSET ?"
             tupla = tuple([parametros[chave] for chave in parametros])
         else:
-            # 2. Foi substituido aqui também os simbolos de pesquisa ">" por 
-            # ">=" e "<" e "<=" para uma melhor pesquisa
             consulta = "SELECT * FROM hoteis WHERE \
                 (estrelas >= ? and estrelas <= ?) \
                 and (diaria >= ? and diaria <= ?) \
