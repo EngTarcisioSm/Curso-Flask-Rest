@@ -1,11 +1,5 @@
-# 035_RelacionamentosTabelas_Criando_Def_EndPointsSite
+# 035_RelacionamentosTabelas_Criando_Recurso_Site
 
 - Observações
-    - Criado no postman as requisições 
-    - get: /sites
-    - get: /sites/{url}
-    - post: /sites/{url}
-    - del: /sites/{url}
-    
-    - Código não teve alteração apenas o postman
+
 - Att
