@@ -72,15 +72,9 @@ class Hoteis(Resource):
 
         resultado = cursor.execute(consulta, tupla)
 
-        # 1. resultado será colocado em uma lista, deve haver uma iteração
-        # sobre o resultado pois o mesmo só possui os valores e não as chaves
-        # dos dados
         hoteis = list()
 
         for linha in resultado:
-            # 2. Aqui também deve-se verificar a ordem em que foi criado o
-            # banco pois os dados viram conforme a ordem do banco em um array
-            # contendo apenas os valores sendo um array bidimensional
             hoteis.append({
                 "hotel_id": linha[0],
                 "nome": linha[1],
