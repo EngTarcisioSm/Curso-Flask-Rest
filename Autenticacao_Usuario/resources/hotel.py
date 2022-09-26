@@ -17,36 +17,6 @@ path_params.add_argument('limit', type=float)
 path_params.add_argument('offset', type=float)
 
 
-# 1. Esta função bem como as strings de consultas podem estar armazenadas
-# dentro de um outro arquivo, de forma a organizar o código
-# def normalize_path_params(cidade=None,
-#                           estrelas_min=0,
-#                           estrelas_max=10,
-#                           diaria_min=0,
-#                           diaria_max=99999999999,
-#                           limit=50,
-#                           offset=0,
-#                           **dados):
-
-#     if cidade:
-#         return {
-#             'cidade': cidade,
-#             'estrelas_min': estrelas_min,
-#             'estrelas_max': estrelas_max,
-#             'diaria_min': diaria_min,
-#             'diaria_max': diaria_max,
-#             'limit': limit,
-#             'offset': offset
-#         }
-#     return {
-#         'estrelas_min': estrelas_min,
-#         'estrelas_max': estrelas_max,
-#         'diaria_min': diaria_min,
-#         'diaria_max': diaria_max,
-#         'limit': limit,
-#         'offset': offset
-#     }
-
 
 class Hoteis(Resource):
     def get(self):
@@ -61,12 +31,9 @@ class Hoteis(Resource):
         parametros = normalize_path_params(**dados_validos)
 
         if parametros.get('cidade'):
-
-            # 2. movido a string de consulta para o arquivo filtros.py
             consulta = CONSULTA_COM_CIDADE
             tupla = tuple([parametros[chave] for chave in parametros])
         else:
-            # 3. movido  a string de consulta para o arquivo filtros.py
             consulta = CONSULTA_SEM_CIDADE
             tupla = tuple([parametros[chave] for chave in parametros])
 

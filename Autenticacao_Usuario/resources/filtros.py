@@ -1,4 +1,3 @@
-# 4. Movimentação de trechos de código para este módulo
 
 CONSULTA_COM_CIDADE = "SELECT * FROM hoteis \
                 WHERE cidade = ? \
