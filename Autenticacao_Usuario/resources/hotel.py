@@ -3,6 +3,9 @@ from flask_restful import Resource, reqparse
 from models.hotelModel import HotelModel
 from flask_jwt_extended import jwt_required
 import sqlite3
+from resources.filtros import normalize_path_params
+from resources.filtros import CONSULTA_COM_CIDADE
+from resources.filtros import CONSULTA_SEM_CIDADE
 
 path_params = reqparse.RequestParser()
 path_params.add_argument('cidade', type=str)
@@ -14,33 +17,35 @@ path_params.add_argument('limit', type=float)
 path_params.add_argument('offset', type=float)
 
 
-def normalize_path_params(cidade=None,
-                          estrelas_min=0,
-                          estrelas_max=10,
-                          diaria_min=0,
-                          diaria_max=99999999999,
-                          limit=50,
-                          offset=0,
-                          **dados):
+# 1. Esta função bem como as strings de consultas podem estar armazenadas
+# dentro de um outro arquivo, de forma a organizar o código
+# def normalize_path_params(cidade=None,
+#                           estrelas_min=0,
+#                           estrelas_max=10,
+#                           diaria_min=0,
+#                           diaria_max=99999999999,
+#                           limit=50,
+#                           offset=0,
+#                           **dados):
 
-    if cidade:
-        return {
-            'cidade': cidade,
-            'estrelas_min': estrelas_min,
-            'estrelas_max': estrelas_max,
-            'diaria_min': diaria_min,
-            'diaria_max': diaria_max,
-            'limit': limit,
-            'offset': offset
-        }
-    return {
-        'estrelas_min': estrelas_min,
-        'estrelas_max': estrelas_max,
-        'diaria_min': diaria_min,
-        'diaria_max': diaria_max,
-        'limit': limit,
-        'offset': offset
-    }
+#     if cidade:
+#         return {
+#             'cidade': cidade,
+#             'estrelas_min': estrelas_min,
+#             'estrelas_max': estrelas_max,
+#             'diaria_min': diaria_min,
+#             'diaria_max': diaria_max,
+#             'limit': limit,
+#             'offset': offset
+#         }
+#     return {
+#         'estrelas_min': estrelas_min,
+#         'estrelas_max': estrelas_max,
+#         'diaria_min': diaria_min,
+#         'diaria_max': diaria_max,
+#         'limit': limit,
+#         'offset': offset
+#     }
 
 
 class Hoteis(Resource):
@@ -57,17 +62,12 @@ class Hoteis(Resource):
 
         if parametros.get('cidade'):
 
-            consulta = "SELECT * FROM hoteis \
-                WHERE cidade = ? \
-                and (estrelas >= ? and estrelas <= ?) \
-                and (diaria >= ? and diaria <= ?) \
-                LIMIT ? OFFSET ?"
+            # 2. movido a string de consulta para o arquivo filtros.py
+            consulta = CONSULTA_COM_CIDADE
             tupla = tuple([parametros[chave] for chave in parametros])
         else:
-            consulta = "SELECT * FROM hoteis WHERE \
-                (estrelas >= ? and estrelas <= ?) \
-                and (diaria >= ? and diaria <= ?) \
-                LIMIT ? OFFSET ?"
+            # 3. movido  a string de consulta para o arquivo filtros.py
+            consulta = CONSULTA_SEM_CIDADE
             tupla = tuple([parametros[chave] for chave in parametros])
 
         resultado = cursor.execute(consulta, tupla)
@@ -82,7 +82,6 @@ class Hoteis(Resource):
                 "diaria": linha[3],
                 "cidade": linha[4]
             })
-        
 
         return {'hoteis': hoteis}
 
