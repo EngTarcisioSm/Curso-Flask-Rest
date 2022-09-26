@@ -62,21 +62,14 @@ class Hoteis(Resource):
                 and (diaria > ? and diaria < ?) \
                 LIMIT ? OFFSET ?"
             
-            # 1. pegar uma tupla com todos os dados dos paramtros para que 
-            # eles entrem onde há "?" na string de comunicação com o banco de 
-            # dados
             tupla = tuple([parametros[chave] for chave in parametros])
         else:
-            # 2. consulta semelhante sem a cidade e captando a tupla para 
-            # inserir nas interrogações, é importante que a ordem da pesquisa 
-            # esteja identica ao que a função normalize retorna os dados
             consulta = "SELECT * FROM hoteis WHERE \
                 (estrelas > ? and estrelas < ?) \
                 and (diaria > ? and diaria < ?) \
                 LIMIT ? OFFSET ?"
             tupla = tuple([parametros[chave] for chave in parametros])
         
-        # 3. pesquisa no banco de dados 
         resultado = cursor.execute(consulta, tupla)
 
         return {'hoteis': [hotel.json() for hotel in HotelModel.query.all()]}
