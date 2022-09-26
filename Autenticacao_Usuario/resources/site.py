@@ -2,7 +2,6 @@ from flask_restful import Resource
 from models.siteModel import SiteModel
 
 
-
 class Sites(Resource):
 
     def get(self):
@@ -24,8 +23,7 @@ class Site(Resource):
         try:
             site.save_site()
         except:
-            return {'message': ' An internal error ocurred trying to create a \
-            new site.'}, 500
+            return {'message': 'An internal error ocurred trying to create a new site.'}, 500
 
         return site.json()
 

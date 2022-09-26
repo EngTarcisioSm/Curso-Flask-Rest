@@ -3,3 +3,4 @@
 - Observação
 
 - Att
+    - resources/hotel.py (1)

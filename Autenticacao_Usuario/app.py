@@ -17,9 +17,11 @@ app.config['JWT_BLACKLIST_ENABLED'] = True
 api = Api(app)
 jwt = JWTManager(app)
 
+
 @jwt.token_in_blocklist_loader
 def verifica_blacklist(self, token):
     return token['jti'] in BLACKLIST
+
 
 @jwt.revoked_token_loader
 def token_de_acesso_invalidado(self, token):
@@ -38,7 +40,7 @@ api.add_resource(UserRegister, '/cadastro')
 api.add_resource(UserLogin, '/login')
 api.add_resource(UserLogout, '/logout')
 api.add_resource(Sites, '/sites')
-api.add_resource(Site, '/sites/<string>:url')
+api.add_resource(Site, '/sites/<string:url>')
 
 
 if __name__ == '__main__':

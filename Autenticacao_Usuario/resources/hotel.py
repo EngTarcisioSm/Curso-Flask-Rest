@@ -47,7 +47,9 @@ class Hoteis(Resource):
                 "nome": linha[1],
                 "estrelas": linha[2],
                 "diaria": linha[3],
-                "cidade": linha[4]
+                "cidade": linha[4],
+                # 2. incluir o Id do site em que o hotel esta associado 
+                "site_id": linha[5]
             })
 
         return {'hoteis': hoteis}
@@ -63,12 +65,11 @@ class Hotel(Resource):
         'estrelas' field cannot be left brank")
     argumentos.add_argument('diaria')
     argumentos.add_argument('cidade')
-
-    # def findHotel(self, hotel_id):
-    #     for hotel in hoteis:
-    #         if hotel['hotel_id'] == hotel_id:
-    #             return hotel
-    #     return None
+    # 1. Adição do argumento novo a ser pego site_id, atributo obrigatório, 
+    # sendo do tipo int, obrigatório e tendo uma mensagem de erro configurada 
+    # para o caso de não receber o valor que necessita de forma apropriada 
+    argumentos.add_argument('site_id', type=int, required=True, 
+        help='Every hotel needs to be linked with a site')
 
     def get(self, hotel_id):
         hotel_obj = HotelModel.find_hotel(hotel_id)
