@@ -16,7 +16,7 @@ path_params.add_argument('offset', type=float)
 
 def normalize_path_params(cidade=None,
                           estrelas_min=0,
-                          estrelas_max=0,
+                          estrelas_max=10,
                           diaria_min=0,
                           diaria_max=99999999999,
                           limit=50,
@@ -45,7 +45,7 @@ def normalize_path_params(cidade=None,
 
 class Hoteis(Resource):
     def get(self):
-        connection = sqlite3.connect('banco.db')
+        connection = sqlite3.connect('Autenticacao_Usuario/banco.db')
         cursor = connection.cursor()
 
         dados = path_params.parse_args()
@@ -56,17 +56,22 @@ class Hoteis(Resource):
         parametros = normalize_path_params(**dados_validos)
 
         if parametros.get('cidade'):
-            consulta = "SELECT * FROM hoteis WHERE \
-                (cidade = ? \
-                and(estrelas > ? and estrelas < ?) \
-                and (diaria > ? and diaria < ?) \
-                LIMIT ? OFFSET ?"
 
+            # 1. Foi substituido na pesquisa o simbolo de ">" por ">=" e o 
+            # simbolo de "<" por "<=" para que a consulta tivesse uma 
+            # abrangencia mais proxima da realidade do que se deseja
+            consulta = "SELECT * FROM hoteis \
+                WHERE cidade = ? \
+                and (estrelas >= ? and estrelas <= ?) \
+                and (diaria >= ? and diaria <= ?) \
+                LIMIT ? OFFSET ?"
             tupla = tuple([parametros[chave] for chave in parametros])
         else:
+            # 2. Foi substituido aqui também os simbolos de pesquisa ">" por 
+            # ">=" e "<" e "<=" para uma melhor pesquisa
             consulta = "SELECT * FROM hoteis WHERE \
-                (estrelas > ? and estrelas < ?) \
-                and (diaria > ? and diaria < ?) \
+                (estrelas >= ? and estrelas <= ?) \
+                and (diaria >= ? and diaria <= ?) \
                 LIMIT ? OFFSET ?"
             tupla = tuple([parametros[chave] for chave in parametros])
 
@@ -82,8 +87,9 @@ class Hoteis(Resource):
                 "diaria": linha[3],
                 "cidade": linha[4]
             })
+        
 
-        return {'hoteis': [hotel.json() for hotel in HotelModel.query.all()]}
+        return {'hoteis': hoteis}
 
 
 class Hotel(Resource):
@@ -97,11 +103,11 @@ class Hotel(Resource):
     argumentos.add_argument('diaria')
     argumentos.add_argument('cidade')
 
-    def findHotel(self, hotel_id):
-        for hotel in hoteis:
-            if hotel['hotel_id'] == hotel_id:
-                return hotel
-        return None
+    # def findHotel(self, hotel_id):
+    #     for hotel in hoteis:
+    #         if hotel['hotel_id'] == hotel_id:
+    #             return hotel
+    #     return None
 
     def get(self, hotel_id):
         hotel_obj = HotelModel.find_hotel(hotel_id)
