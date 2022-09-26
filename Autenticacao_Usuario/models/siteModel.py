@@ -21,7 +21,7 @@ class SiteModel(banco.Model):
         }
 
     @classmethod
-    def find_hotel(cls, url):
+    def find_site(cls, url):
 
         site = cls.query.filter_by(url=url).first()
 
