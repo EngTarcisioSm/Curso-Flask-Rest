@@ -1,9 +1,10 @@
 
 from flask_restful import Resource, reqparse
-from Autenticacao_Usuario.models.siteModel import SiteModel
+from models.siteModel import SiteModel
 from models.hotelModel import HotelModel
 from flask_jwt_extended import jwt_required
 import sqlite3
+from models.siteModel import SiteModel
 from resources.filtros import normalize_path_params
 from resources.filtros import CONSULTA_COM_CIDADE
 from resources.filtros import CONSULTA_SEM_CIDADE
