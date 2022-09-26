@@ -10,22 +10,37 @@ class HotelModel(banco.Model):
     estrelas = banco.Column(banco.Float(precision=1))
     diaria = banco.Column(banco.Float(precision=2))
     cidade = banco.Column(banco.String(40))
+    # 6. Será incluido a chave estrangeira, para o relacionamento entre Hotel
+    # e site, um site para muitos hoteis. O segundo atributo determina a
+    # relação, onde é site_id é uma chave estrangeira de sites.side_id
+    site_id = banco.Column(banco.Integer, banco.ForeignKey('sites.site_id'))
 
-    def __init__(self, hotel_id, nome, estrelas, diaria, cidade) -> None:
+    # 7. Adicionar a nova coluna ao inicializador e criar um novo atributo
+    # "site_id" e "self.site_id"
+
+    # 14. Seria possivel elaborar a relação inversa apresentando aqui o site
+    # que esta associado a este hotel, entretanto como esse dados não
+    # acrescenta nada a logica, neste momento ele não é implementado
+    # site = banco.relationship('SiteModel')
+
+    def __init__(self, hotel_id, nome, estrelas, diaria, cidade, site_id) -> None:
 
         self.hotel_id = hotel_id
         self.nome = nome
         self.estrelas = estrelas
         self.diaria = diaria
         self.cidade = cidade
+        self.site_id = site_id
 
+    # 8. Acrescentar o site_id ao json
     def json(self):
         return {
             'hotel_id': self.hotel_id,
             'nome': self.nome,
             'estrelas': self.estrelas,
             'diaria': self.diaria,
-            'cidade': self.cidade
+            'cidade': self.cidade,
+            'site_id': self.site_id
         }
 
     @classmethod
@@ -40,13 +55,14 @@ class HotelModel(banco.Model):
     def save_hotel(self):
         banco.session.add(self)
         banco.session.commit()
-    
+
+    # 9. Por lógica o site_id não será um item atualizavel
     def update_hotel(self, nome, estrelas, diaria, cidade):
         self.nome = nome
         self.estrelas = estrelas
         self.diaria = diaria
         self.cidade = cidade
-    
+
     def delete_hotel(self):
         banco.session.delete(self)
         banco.session.commit()
