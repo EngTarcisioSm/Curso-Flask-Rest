@@ -4,7 +4,6 @@ from flask_restful import Api
 from blacklist import BLACKLIST
 from resources.hotel import Hoteis, Hotel
 from resources.usuario import User, UserRegister, UserLogin, UserLogout
-# 12. Adição dos novos recursos 
 from resources.site import Site, Sites
 from flask_jwt_extended import JWTManager
 
@@ -38,8 +37,6 @@ api.add_resource(User, '/usuarios/<int:user_id>')
 api.add_resource(UserRegister, '/cadastro')
 api.add_resource(UserLogin, '/login')
 api.add_resource(UserLogout, '/logout')
-# 13. adição dos novos recursos, sites que n recebe parametro nenhum e site 
-# que recebe uma string (url)
 api.add_resource(Sites, '/sites')
 api.add_resource(Site, '/sites/<string>:url')
 
