@@ -29,6 +29,16 @@ class SiteModel(banco.Model):
             return site
         return None
 
+    # 5. criado o metodo de pesquisa de ID
+    @classmethod
+    def find_by_id(cls, site_id):
+
+        site = cls.query.filter_by(site_id=site_id).first()
+
+        if site:
+            return site
+        return None
+
     def save_site(self):
         banco.session.add(self)
         banco.session.commit()
@@ -37,5 +47,13 @@ class SiteModel(banco.Model):
         self.url = url
 
     def delete_site(self):
+        # 1. antes de deletar o site é necessário deletar todos os hoteis
+        # presentes naquele site
+
+        # 2. utilizando compreensão de listas é pego os objeto armazenados em
+        # hoteis e utilizado seu metodo delete, com isso todos os hoteis
+        # associados aquele site serão deletados
+        [hotel.delete_hotel() for hotel in self.hoteis]
+
         banco.session.delete(self)
         banco.session.commit()

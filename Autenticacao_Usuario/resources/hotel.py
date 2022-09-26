@@ -1,5 +1,6 @@
 
 from flask_restful import Resource, reqparse
+from Autenticacao_Usuario.models.siteModel import SiteModel
 from models.hotelModel import HotelModel
 from flask_jwt_extended import jwt_required
 import sqlite3
@@ -15,7 +16,6 @@ path_params.add_argument('diaria_min', type=float)
 path_params.add_argument('diaria_max', type=float)
 path_params.add_argument('limit', type=float)
 path_params.add_argument('offset', type=float)
-
 
 
 class Hoteis(Resource):
@@ -48,7 +48,6 @@ class Hoteis(Resource):
                 "estrelas": linha[2],
                 "diaria": linha[3],
                 "cidade": linha[4],
-                # 2. incluir o Id do site em que o hotel esta associado 
                 "site_id": linha[5]
             })
 
@@ -65,11 +64,8 @@ class Hotel(Resource):
         'estrelas' field cannot be left brank")
     argumentos.add_argument('diaria')
     argumentos.add_argument('cidade')
-    # 1. Adição do argumento novo a ser pego site_id, atributo obrigatório, 
-    # sendo do tipo int, obrigatório e tendo uma mensagem de erro configurada 
-    # para o caso de não receber o valor que necessita de forma apropriada 
-    argumentos.add_argument('site_id', type=int, required=True, 
-        help='Every hotel needs to be linked with a site')
+    argumentos.add_argument('site_id', type=int, required=True,
+                            help='Every hotel needs to be linked with a site')
 
     def get(self, hotel_id):
         hotel_obj = HotelModel.find_hotel(hotel_id)
@@ -87,13 +83,23 @@ class Hotel(Resource):
         dados = self.argumentos.parse_args()
         hotel_obj = HotelModel(hotel_id, **dados)
 
+        # 3. É necessário efetuar uma verificação, com objetivo de verificar a
+        # existencia do site_id passado, caso o mesmo exista o processo é
+        # efetuado em caso contrário é apresentado uma mesagem de erro. o
+        # metodo SiteModel.find_by_id ainda não existe devendo ser criado
+        if not SiteModel.find_by_id(dados['site_id']):
+            # 4. Não foi encontrado o site id, logo será retornado uma mensagem
+            # de erro ao usuario indicando que não existe um site_id para ser
+            # associado aquele hotel passado. É retornado um valor de bad 
+            # request 400
+            return {'message': 'The hotel must be associated to a valid site id.'}, 400
+
         try:
             hotel_obj.save_hotel()
         except:
             return {'message': 'An internal error ocurred try to save hotel again'}, 500
         return hotel_obj.json(), 500
 
-    # 4. ==3
     @jwt_required()
     def put(self, hotel_id):
 
@@ -112,7 +118,6 @@ class Hotel(Resource):
         hotel_new.save_hotel()
         return hotel_new.json(), 201
 
-    # 5. ==3
     @jwt_required()
     def delete(self, hotel_id):
         hotel = HotelModel.find_hotel(hotel_id)
