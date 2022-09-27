@@ -1,10 +1,5 @@
-# 037 Transformando relacionamento de agregação em composição
+# 039
 
-- Observação
-    - Ao criar um hotel com site "site_id" que não existe, o sistema cria esse erro deve ser corrigido 
-    - Ao apagar um site, efetuando busca por hoteis no recurso hoteis o mesmo continua aparecendo sendo que o mais logico seria nenhum hotel associado aquele site aparecer 
-        - A situação atual seria uma situação de agregação onde mesmo o site sendo excluido, os hoteis associados a ele permaneceria, ao "corrigir" essa situação a relação passa a de fato ser de composição 
-- Att
-    - models/siteModel.py (1,2)
-    - resources/hotel.py (3,4)
-    - models/siteModel.py (5)
+- Será feito um upgrade na API na qual o usuario para ter seus dados de usuarios ativados terá que efetuar uma configrmação por email. Será enviado um link de ativação para o email do usuario e quando ele clicar no link o cadastro estará efetivado.
+- Haverá um campo no cadastro booleano para verificar se o cadastro foi efetivado ou não, será também incluido um campo para o usuario inserir um email 
+- A implementação será feita gradualmente inicialmente não necessitando da ativação via email, chegando ao finalmente dela ser necessária 
