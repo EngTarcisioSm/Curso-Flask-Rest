@@ -3,7 +3,9 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from blacklist import BLACKLIST
 from resources.hotel import Hoteis, Hotel
-from resources.usuario import User, UserRegister, UserLogin, UserLogout
+# 12. importando a classe/recurso UserConfirm
+from resources.usuario import User, UserConfirm, UserRegister, UserLogin
+from resources.usuario import UserLogout
 from resources.site import Site, Sites
 from flask_jwt_extended import JWTManager
 
@@ -41,7 +43,8 @@ api.add_resource(UserLogin, '/login')
 api.add_resource(UserLogout, '/logout')
 api.add_resource(Sites, '/sites')
 api.add_resource(Site, '/sites/<string:url>')
-
+# 12. Adicionar recurso que recebe um inteiro
+api.add_resource(UserConfirm, '/confirmacao/<int:user_id>')
 
 if __name__ == '__main__':
 

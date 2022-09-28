@@ -102,4 +102,4 @@ class UserConfirm(Resource):
         # 11. Atualizando o status do usuario
         user.save_user()
         return {'message': "User id '{}' confirmed successfully."
-                .format(user_id)}
+                .format(user_id)}, 200
