@@ -43,7 +43,6 @@ api.add_resource(UserLogin, '/login')
 api.add_resource(UserLogout, '/logout')
 api.add_resource(Sites, '/sites')
 api.add_resource(Site, '/sites/<string:url>')
-# 12. Adicionar recurso que recebe um inteiro
 api.add_resource(UserConfirm, '/confirmacao/<int:user_id>')
 
 if __name__ == '__main__':
