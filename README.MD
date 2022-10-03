@@ -9,4 +9,4 @@
   - models/usuario.py (1,2,3,4,5,6,7,8,9,10)
   - resources/usuario.py (11,12,13)
   - models/usuario.py (14)
-  - resources/usuario.py (15)
+  - resources/usuario.py (15,16,17,18,19,20)
